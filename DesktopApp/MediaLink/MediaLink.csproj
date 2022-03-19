@@ -4,7 +4,25 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
+    <Description>A tool for sharing your Windows media infomation to your android device so it can be controlled from a notification.</Description>
+    <PackageProjectUrl>https://github.com/rtm516/MediaLink</PackageProjectUrl>
+    <Copyright>Ryan Milner © 2022</Copyright>
+    <PackageIcon>MediaLink Icon.png</PackageIcon>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <Authors>Ryan Milner</Authors>
+    <Company>rtm516</Company>
+    <Version>$(AssemblyVersion)</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove=".MediaLink\**" />
+    <Compile Remove="MediaLink\**" />
+    <EmbeddedResource Remove=".MediaLink\**" />
+    <EmbeddedResource Remove="MediaLink\**" />
+    <None Remove=".MediaLink\**" />
+    <None Remove="MediaLink\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Fleck" Version="1.2.0" />
@@ -17,6 +35,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +50,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="Resources\MediaLink Icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

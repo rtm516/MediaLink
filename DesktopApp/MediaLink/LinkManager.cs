@@ -13,17 +13,23 @@ namespace MediaLink
     internal class LinkManager
     {
         public static GlobalSystemMediaTransportControlsSession CurrentSession { get; private set; }
+        public static WebSocketManager WebSocketManager { get; private set; }
 
         private static MediaInfoWrapper lastMediaWrapper;
 
         private async static Task Run()
         {
-            WebSocketManager webSocketManager = new WebSocketManager();
+            WebSocketManager = new WebSocketManager();
 
             GlobalSystemMediaTransportControlsSessionManager sessionManager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
 
             while (true)
             {
+                // Really this shouldnt be here but I don't want another thread running
+                bool isRunning = WebSocketManager.IsRunning();
+                TrayApplicationContext.StatusMenuItem.Text = "Status: " + (isRunning ? "Running" : "Stopped");
+                TrayApplicationContext.StatusMenuItem.Image = isRunning ? Properties.Resources.Running : Properties.Resources.Stopped;
+
                 CurrentSession = sessionManager.GetCurrentSession();
 
                 MediaInfoWrapper mediaWrapper = new MediaInfoWrapper();
@@ -63,7 +69,7 @@ namespace MediaLink
                 {
                     // Send data over websocket
                     Console.WriteLine("Updating websocket");
-                    webSocketManager.BroadcastMessage(mediaWrapper);
+                    WebSocketManager.BroadcastMessage(mediaWrapper);
 
                     lastMediaWrapper = mediaWrapper;
                 }

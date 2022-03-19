@@ -16,13 +16,7 @@ namespace MediaLink
         {
             connections = new List<IWebSocketConnection>();
 
-            server = new WebSocketServer("ws://0.0.0.0:8181");
-            server.Start(socket =>
-            {
-                socket.OnOpen = () => OnOpen(socket);
-                socket.OnClose = () => OnClose(socket);
-                socket.OnMessage = message => OnMessage(socket, message);
-            });
+            Restart();
         }
 
         private void OnOpen(IWebSocketConnection socket)
@@ -62,6 +56,25 @@ namespace MediaLink
             }
         }
 
+        internal void Restart()
+        {
+            if (server != null) {
+                server.ListenerSocket.Close();
+                server.Dispose();
+            }
+
+            connections.Clear();
+
+            server = new WebSocketServer("ws://" + Properties.Settings.Default.ListenAddress + ":" + Properties.Settings.Default.ListenPort);
+            server.RestartAfterListenError = true;
+            server.Start(socket =>
+            {
+                socket.OnOpen = () => OnOpen(socket);
+                socket.OnClose = () => OnClose(socket);
+                socket.OnMessage = message => OnMessage(socket, message);
+            });
+        }
+
         public void BroadcastMessage(MediaInfoWrapper mediaWrapper)
         {
             String jsonData = JsonSerializer.Serialize(mediaWrapper, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
@@ -72,6 +85,18 @@ namespace MediaLink
             foreach (IWebSocketConnection connection in connections)
             {
                 connection.Send(jsonData);
+            }
+        }
+
+        public bool IsRunning()
+        {
+            try
+            {
+                return server.ListenerSocket.LocalEndPoint != null;
+            }
+            catch (ObjectDisposedException)
+            {
+                return false;
             }
         }
     }
