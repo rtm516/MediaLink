@@ -9,13 +9,13 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         switch (intent.getAction()) {
             case NotificationHandler.ACTION_PLAY:
-                MainActivity.getInstance().getWebSocketHandler().send("play");
+                MainActivity.getInstance().getWebSocketHandler().safeSend("play");
                 break;
             case NotificationHandler.ACTION_NEXT:
-                MainActivity.getInstance().getWebSocketHandler().send("next");
+                MainActivity.getInstance().getWebSocketHandler().safeSend("next");
                 break;
             case NotificationHandler.ACTION_PREV:
-                MainActivity.getInstance().getWebSocketHandler().send("prev");
+                MainActivity.getInstance().getWebSocketHandler().safeSend("prev");
                 break;
         }
     }

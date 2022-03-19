@@ -48,13 +48,13 @@ namespace MediaLink
             switch (message)
             {
                 case "play":
-                    Program.CurrentSession.TryTogglePlayPauseAsync();
+                    LinkManager.CurrentSession.TryTogglePlayPauseAsync();
                     break;
                 case "prev":
-                    Program.CurrentSession.TrySkipPreviousAsync();
+                    LinkManager.CurrentSession.TrySkipPreviousAsync();
                     break;
                 case "next":
-                    Program.CurrentSession.TrySkipNextAsync();
+                    LinkManager.CurrentSession.TrySkipNextAsync();
                     break;
                 default:
                     Console.WriteLine(message);

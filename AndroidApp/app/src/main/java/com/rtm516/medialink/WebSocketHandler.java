@@ -65,5 +65,9 @@ public class WebSocketHandler extends WebSocketClient {
         ex.printStackTrace();
     }
 
-
+    public void safeSend(String message) {
+        if (isOpen()) {
+            send(message);
+        }
+    }
 }
