@@ -1,6 +1,7 @@
 ﻿using Fleck;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -22,7 +23,7 @@ namespace MediaLink
         private void OnOpen(IWebSocketConnection socket)
         {
             connections.Add(socket);
-            Console.WriteLine("Open socket " + socket.ConnectionInfo.Id);
+            Debug.WriteLine("Open socket " + socket.ConnectionInfo.Id);
 
             if (lastMediaWrapper != null)
             {
@@ -34,7 +35,7 @@ namespace MediaLink
         private void OnClose(IWebSocketConnection socket)
         {
             connections.Remove(socket);
-            Console.WriteLine("Close socket " + socket.ConnectionInfo.Id);
+            Debug.WriteLine("Close socket " + socket.ConnectionInfo.Id);
         }
 
         private void OnMessage(IWebSocketConnection socket, String message)
@@ -51,7 +52,7 @@ namespace MediaLink
                     LinkManager.CurrentSession.TrySkipNextAsync();
                     break;
                 default:
-                    Console.WriteLine(message);
+                    Debug.WriteLine(message);
                     break;
             }
         }
@@ -78,7 +79,7 @@ namespace MediaLink
         public void BroadcastMessage(MediaInfoWrapper mediaWrapper)
         {
             String jsonData = JsonSerializer.Serialize(mediaWrapper, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
-            Console.WriteLine("Broadcasting: " + jsonData);
+            Debug.WriteLine("Broadcasting: " + jsonData);
 
             lastMediaWrapper = mediaWrapper;
 

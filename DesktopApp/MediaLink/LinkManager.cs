@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -25,7 +26,7 @@ namespace MediaLink
 
             while (true)
             {
-                // Really this shouldnt be here but I don't want another thread running
+                // Really this shouldn't be here but I don't want another thread running
                 bool isRunning = WebSocketManager.IsRunning();
                 TrayApplicationContext.StatusMenuItem.Text = "Status: " + (isRunning ? "Running" : "Stopped");
                 TrayApplicationContext.StatusMenuItem.Image = isRunning ? Properties.Resources.Running : Properties.Resources.Stopped;
@@ -51,7 +52,7 @@ namespace MediaLink
                     // Convert the thumb to a jpg and base64
                     if (mediaProperties.Thumbnail != null)
                     {
-                        Stream stream = (await mediaProperties.Thumbnail.OpenReadAsync()).GetInputStreamAt(0).AsStreamForRead(32768);
+                        Stream stream = (await mediaProperties.Thumbnail.OpenReadAsync()).GetInputStreamAt(0).AsStreamForRead(short.MaxValue);
 
                         Image image = Image.FromStream(stream);
 
@@ -68,7 +69,7 @@ namespace MediaLink
                 if (!mediaWrapper.Equals(lastMediaWrapper))
                 {
                     // Send data over websocket
-                    Console.WriteLine("Updating websocket");
+                    Debug.WriteLine("Updating websocket");
                     WebSocketManager.BroadcastMessage(mediaWrapper);
 
                     lastMediaWrapper = mediaWrapper;
