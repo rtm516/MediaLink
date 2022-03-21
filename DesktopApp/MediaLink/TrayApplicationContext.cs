@@ -20,8 +20,9 @@ namespace MediaLink
             notifyIcon = new NotifyIcon();
             notifyIcon.Icon = Properties.Resources.Icon;
             notifyIcon.ContextMenuStrip = new ContextMenuStrip();
+            notifyIcon.Text = Assembly.GetExecutingAssembly().GetName().Name + " " + Assembly.GetExecutingAssembly().GetName().Version;
 
-            ToolStripMenuItem titleMenuItem = new ToolStripMenuItem(Assembly.GetExecutingAssembly().GetName().Name + " " + Assembly.GetExecutingAssembly().GetName().Version, notifyIcon.Icon.ToBitmap());
+            ToolStripMenuItem titleMenuItem = new ToolStripMenuItem(notifyIcon.Text, notifyIcon.Icon.ToBitmap());
             titleMenuItem.Enabled = false;
 
             StatusMenuItem = new ToolStripMenuItem("Status: Stopped", Properties.Resources.Stopped);
